@@ -55,6 +55,7 @@ client.on('interactionCreate', async interaction => {
 
     const infoEmbed = new EmbedBuilder() 
       .setColor("#ffffff")
+      .setImage(`${interaction.guild.icon}`)
       .setDescription(`Guild Name: ${interaction.guild.name} \n
         Number of Members: ${interaction.guild.memberCount}\n
         Number of Banned Members: ${guild.bans.cache.size}\n
