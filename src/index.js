@@ -28,7 +28,7 @@ client.on('interactionCreate', async interaction => {
     const guild = interaction.guild;
 
     if (!guild) {
-      console.log('This command only works in a server.');
+      console.log('This command only works in a guild.');
       return;
     }
 
