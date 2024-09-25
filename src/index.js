@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('./register-commands'); // Ensure command registration runs first
 
-const { Client, GatewayIntentBits, PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionsBitField, EmbedBuilder, } = require('discord.js');
 
 const client = new Client({ 
   intents: [
@@ -35,6 +35,8 @@ client.on('interactionCreate', async interaction => {
     // Fetching the members of the guild where the command was used
     await guild.members.fetch();
 
+    const owner = await interaction.guild.fetchOwner();
+
     const permissionForAdmin = PermissionsBitField.Flags.Administrator;
     let membersWithAdmin = 0;
 
@@ -44,23 +46,20 @@ client.on('interactionCreate', async interaction => {
         membersWithAdmin++;
       }
     });
-    // const infoEmbed = new EmbedBuilder() 
-    //   .setColor("#ffffff")
-    //   .setDescription(await interaction.reply(`Guild Name: ${interaction.guild.name} \n
-    //     Number of Members: ${interaction.guild.memberCount}\n
-    //     Number of Banned Members: ${guild.bans.cache.size}\n
-    //     Number of Admins: ${membersWithAdmin}\n
-    //   `));
-    //   channel.send({ embeds: [infoEmbed] });
 
     const infoEmbed = new EmbedBuilder() 
+      .setAuthor({name: 'Server info', iconURL:`${interaction.guild.iconURL()}`})
       .setColor("#ffffff")
-      .setImage(`${interaction.guild.icon}`)
-      .setDescription(`Guild Name: ${interaction.guild.name} \n
+      .setThumbnail(`${interaction.guild.iconURL()}`)
+      .setFooter({text : `${interaction.user.username}`})
+      .setDescription(`Server Name: ${interaction.guild.name} \n
+        Server owner: ${owner.user.tag}\n
         Number of Members: ${interaction.guild.memberCount}\n
         Number of Banned Members: ${guild.bans.cache.size}\n
         Number of Admins: ${membersWithAdmin}\n
+
       `);
+      
       await (channelName.send({ embeds: [infoEmbed] }));
     
   }
