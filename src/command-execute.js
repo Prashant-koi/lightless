@@ -62,4 +62,9 @@ client.on('interactionCreate', async interaction => {
         await (channelName.send({ embeds: [infoEmbed] }));
       
     }
+
+    //For command /ban
+    if (interaction.commandName === 'ban'){
+      interaction.reply(`banned the user`)
+    }
   });

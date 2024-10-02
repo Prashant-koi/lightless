@@ -1,4 +1,5 @@
 const { REST, Routes } = require('discord.js');
+const { options } = require('.');
 const commands = [
   {
     name: 'hello',
@@ -7,6 +8,11 @@ const commands = [
   {
     name: 'serverinfo',
     description: 'Replies with the information of your server like name, number of memebrs etc.'
+  },
+  {
+    name: 'ban',
+    description: 'Bans the member permanentely',
+    options:[setName('member')]
   },
 ];
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
