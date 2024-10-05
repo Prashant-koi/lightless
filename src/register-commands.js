@@ -12,7 +12,7 @@ const commands = [
   {
     name: 'ban',
     description: 'Bans the member permanentely',
-    options:[setName('member')]
+    options:[{name:'member', type: 'USER'}]
   },
 ];
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);

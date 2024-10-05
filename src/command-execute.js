@@ -65,6 +65,21 @@ client.on('interactionCreate', async interaction => {
 
     //For command /ban
     if (interaction.commandName === 'ban'){
-      interaction.reply(`banned the user`)
+      const member = interaction.options.getUser('member');
+      const guildMember = interaction.guild.members.cache.get(member.id);
+
+      if (!guildMember) {
+        interaction.reply(`The member is not in the server!`)
+      }
+
+      try {
+        await guildMember.ban();
+        await interaction.reply(`${member.tag} has been banned.`)
+      } catch (error) {
+        console.error(error);
+        await interaction.reply(`There was an error while banning this member!`)
+      }
+
+
     }
   });
