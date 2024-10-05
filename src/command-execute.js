@@ -82,4 +82,22 @@ client.on('interactionCreate', async interaction => {
 
 
     }
+
+    if (interaction.commandName === 'mute'){
+      const member= interaction.options.getUser('member');
+      const muteLength = interaction.options.getInteger('muteTime');
+      const guildMember = interaction.guild.member.cache.get(member.id);
+
+      if (!guildMember) {
+        interaction.reply(`The given member is not in the server!`)
+      }
+
+      try{
+        await guildMember.muteTime(muteLength)
+        await interaction.reply(`${member.tag} has been muted for ${muteLength}`)
+      } catch (error) {
+        console.error(error);
+        await interaction.reply(`There was an error! Please try again!`)
+      }
+    }
   });

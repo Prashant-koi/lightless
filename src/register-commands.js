@@ -1,5 +1,5 @@
 const { REST, Routes } = require('discord.js');
-const { options } = require('.');
+// const { options } = require('.');
 const commands = [
   {
     name: 'hello',
@@ -12,8 +12,15 @@ const commands = [
   {
     name: 'ban',
     description: 'Bans the member permanentely',
-    options:[{name:'member', type: 'USER'}]
+    options:[{name:'member', type: 6, description: 'The member to ban.', require: true},]
   },
+  {
+    name: 'mute',
+    description: 'mutes the member for specified amount of time',
+    options: [{name:'member', type: 6, description: 'The member to mute.', require: true},
+              {name: 'duration', type: 3, description: 'How long to mute?', require: true},
+            ]
+  }
 ];
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
