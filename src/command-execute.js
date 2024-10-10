@@ -80,24 +80,85 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply(`There was an error while banning this member!`)
       }
 
-
     }
 
+    //MUTE MEMBER
     if (interaction.commandName === 'mute'){
       const member= interaction.options.getUser('member');
-      const muteLength = interaction.options.getInteger('muteTime');
-      const guildMember = interaction.guild.member.cache.get(member.id);
-
-      if (!guildMember) {
-        interaction.reply(`The given member is not in the server!`)
-      }
+      const muteLength = interaction.options.getString('duration');
 
       try{
-        await guildMember.muteTime(muteLength)
-        await interaction.reply(`${member.tag} has been muted for ${muteLength}`)
-      } catch (error) {
-        console.error(error);
-        await interaction.reply(`There was an error! Please try again!`)
+        const guildMember = await interaction.guild.members.fetch(member.id);
+
+        if (!guildMember) {
+          interaction.reply(`The given member is not in the server!`)
       }
+
+        if (!interaction.guild) {
+          return interaction.reply('This command can only be used in a server.');
+          }
+
+          // Check if guild.members exists
+  
+      // Function to parse duration
+      function parseDuration(duration) {
+        const regex = /^(\d+)([mhd])$/ // Match number followed by 'm', 'h', or 'd'
+        const match = duration.match(regex);
+
+        if (!match) {
+          return null; // Invalid format
+          }
+
+        const amount = parseInt(match[1]);
+        const unit = match[2];
+
+        let milliseconds;
+        //Now we will be converting the given hours, minutes or seconds to miliseconds
+        switch (unit) {
+            case 'm': // Minutes to miliseconds
+                milliseconds = amount * 60 * 1000;
+                break;
+            case 'h': // Hours to miliseconds
+                milliseconds = amount * 60 * 60 * 1000;
+                break;
+            case 'd': // Days to miliseconds
+                milliseconds = amount * 24 * 60 * 60 * 1000;
+                break;
+            default:
+                return null;
+        }
+
+        return milliseconds;
     }
-  });
+
+    const muteDuration = parseDuration(muteLength);
+
+        if (!muteDuration) {
+          return interaction.reply('Invalid duration! Use 1h, 10m, or 1d.');
+        }
+
+        await guildMember.timeout(muteDuration, 'Muted by bot')
+            await interaction.reply(`${member.tag} has been muted for ${muteLength}`)
+
+            setTimeout(async () => {
+              await guildMember.timeout(null); // Removes the timeout
+              interaction.followUp(`${member.tag} has been unmuted.`);
+          }, muteDuration)
+
+
+          }//curley bracket of try{}
+
+        catch (error) {
+          console.error('Error muting member:', error);
+
+        // Check if an interaction reply was already sent
+          if (interaction.replied || interaction.deferred) {
+            await interaction.followUp('There was an error muting the member. Please try again!');
+          } else {
+            await interaction.reply('There was an error muting the member. Please try again!');
+          }
+          }
+
+    }
+
+});
