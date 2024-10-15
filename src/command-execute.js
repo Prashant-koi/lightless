@@ -161,4 +161,22 @@ client.on('interactionCreate', async interaction => {
 
     }
 
+    //Kick member
+    if (interaction.commandName === 'kick'){
+      const member = interaction.options.getUser('member');
+      const guildMember= interaction.guild.members.cache.get(member.id);
+      const kickReason= interaction.options.getString('reason');
+
+      if (!guildMember) {
+        interaction.reply(`The member is not in the server!`)
+      }
+
+      try {
+        await guildMember.kick()
+        interaction.reply(`${member.tag} has been kicked for ${kickReason}`)
+      } catch (error){
+        console.errot(error);
+        await interaction.reply('There was an error while trying to kick this member!')
+      }
+    }
 });

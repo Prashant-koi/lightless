@@ -20,7 +20,14 @@ const commands = [
     options: [{name:'member', type: 6, description: 'The member to mute.', require: true},
               {name: 'duration', type: 3, description: 'How long to mute?', require: true},
             ]
-  }
+  },
+  {
+    name: 'kick',
+    description: 'kicks the member from the server',
+    options: [{name: 'member', type: 6, description: 'The member to be kicked.', require: true},
+      {name: 'reason', type: 3, description: 'Reason for being kicked.', require:true},
+    ]
+  },
 ];
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
