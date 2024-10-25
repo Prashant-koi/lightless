@@ -28,6 +28,11 @@ const commands = [
       {name: 'reason', type: 3, description: 'Reason for being kicked.', require:true},
     ]
   },
+  {
+    name: 'level',
+    description: 'Tells the level and exp of the member.',
+    options:[{name:'name', type: 6, description: 'Name of member.', required: true}]
+  },
 ];
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 

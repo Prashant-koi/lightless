@@ -2,6 +2,7 @@ require('dotenv').config();
 const{PermissionsBitField, EmbedBuilder}= require('discord.js');
 
 const client= require('./index')
+const userData = require('./user-data')
 
 
 
@@ -178,5 +179,23 @@ client.on('interactionCreate', async interaction => {
         console.errot(error);
         await interaction.reply('There was an error while trying to kick this member!')
       }
+    }
+
+    if (interaction.commandName === 'level'){
+      const member = interaction.options.getUser('name')
+      
+      let memberName
+      if (!member) {
+         memberName = await interaction.guild.members.fetch(interaction.user.id);
+      } else {
+         memberName = await interaction.guild.members.fetch(member.id);
+      }
+
+      const levelEnbed = new EmbedBuilder()
+      .setAuthor({name: 'Level'})
+      .setColor("Blue")
+      .setThumbnail(`${memberName.user.displayAvatarURL()}`)
+      .setDescription(`
+        exp = ${userData[member.id].exp}`)
     }
 });
